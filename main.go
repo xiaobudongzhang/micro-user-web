@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"user-web/handler"
 
-	"github.com/xiaobudongzhang/micro-basic/basic/config"
+	"github.com/xiaobudongzhang/micro-basic/config"
 
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2/registry"
