@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	user "github.com/micro-user-web/proto/user"
+	user "github.com/xiaobudongzhang/micro-user-web/proto/user"
 
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/v2/client"

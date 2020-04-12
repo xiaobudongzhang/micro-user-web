@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"user-web/basic/config"
+	"github.com/xiaobudongzhang/micro-user-web/config"
 )
 
 func Init() {
