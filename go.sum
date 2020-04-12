@@ -410,7 +410,8 @@ github.com/xeipuuv/gojsonschema v1.1.0/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4m
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 h1:eY9dn8+vbi4tKz5Qo6v2eYzo7kUS51QINcR5jNpbZS8=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xiaobudongzhang/micro-basic v0.0.0-20200412103158-06cc064762c8 h1:n2r07XU2zMShjWn+tfkI9lyJ+/V8D0DJWM87HScO2Ds=
-github.com/xiaobudongzhang/micro-basic v0.0.0-20200412103158-06cc064762c8/go.mod h1:I/u0z3ZP1fhyMRHvD/ZDG9B5lEMDPxBQJHUjt912ek8=
+github.com/xiaobudongzhang/micro-basic v1.0.0 h1:QgAB3WoTqvE8qypjOzSv4S6XOqIU3zCnCVpYhYslkDI=
+github.com/xiaobudongzhang/micro-basic v1.0.0/go.mod h1:I/u0z3ZP1fhyMRHvD/ZDG9B5lEMDPxBQJHUjt912ek8=
 go.etcd.io/bbolt v1.3.3 h1:MUGmc65QhB3pIlaQ5bB4LwqSj6GIonVJXpZiaKNyaKk=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=

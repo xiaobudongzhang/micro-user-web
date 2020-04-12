@@ -8,5 +8,5 @@ require (
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-micro/v2 v2.4.0
-	github.com/xiaobudongzhang/micro-basic v0.0.0-20200412103158-06cc064762c8
+	github.com/xiaobudongzhang/micro-basic v1.0.0
 )
