@@ -15,7 +15,7 @@ import (
 
 	"github.com/micro/go-micro/v2/web"
 
-	basic "github.com/xiaobudongzhang/micro-basic/basic"
+	basic "github.com/xiaobudongzhang/micro-basic"
 )
 
 func main() {

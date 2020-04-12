@@ -6,14 +6,16 @@ import (
 	"net/http"
 	"time"
 
-	user "github.com/xiaobudongzhang/micro-user-web/proto/user"
+	user "github.com/xiaobudongzhang/micro-user-srv/proto/user"
 
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/v2/client"
+	auth "github.com/xiaobudongzhang/micro-auth/proto/auth"
 )
 
 var (
 	serviceClient user.UserService
+	authClient    auth.Service
 )
 
 type Error struct {
@@ -87,9 +89,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		log.Logf("生成token")
 
-		resp2,err := authClient.MakeAccessToken(context.TODO, &auth.Request{
-			UserId:rsp.User.Id
-			UserName:rsp.User.Name
+		resp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
+			UserId:   uint64(rsp.User.Id),
+			UserName: rsp.User.Name,
 		})
 
 		if err != nil {
@@ -98,14 +100,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Logf("token %s", res2.Token)
+		log.Logf("token %s", resp2.Token)
 		response["token"] = resp2.Token
 
-		w.Header.Add("set-cookie", "application/json; charset=utf-8")
+		w.Header().Add("set-cookie", "application/json; charset=utf-8")
 
 		expire := time.Now().Add(30 * time.Minute)
 
-		cookie := http.Cookie{Name:"remeber-me-token", Value:rsp2.Token,Path:"/", Expires:expire,MaxAge:9000}
+		cookie := http.Cookie{Name: "remeber-me-token", Value: resp2.Token, Path: "/", Expires: expire, MaxAge: 9000}
 
 		http.SetCookie(w, &cookie)
 	} else {
@@ -123,8 +125,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func Logout(w http.ResponseWriter, r *http.Request)  {
+func Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		log.Logf("err param")
 		http.Error(w, "err param", 400)
@@ -140,7 +141,7 @@ func Logout(w http.ResponseWriter, r *http.Request)  {
 	}
 
 	_, err = authClient.DelUserAccessToken(context.TODO(), &auth.Request{
-		Token:tokenCookie.Value,
+		Token: tokenCookie.Value,
 	})
 
 	if err != nil {
@@ -153,7 +154,7 @@ func Logout(w http.ResponseWriter, r *http.Request)  {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 
 	response := map[string]interface{}{
-		"ref": time.Now().UnixNano(),
+		"ref":     time.Now().UnixNano(),
 		"success": true,
 	}
 
