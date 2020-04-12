@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"user-web/basic/config"
 	"user-web/handler"
+
+	"github.com/xiaobudongzhang/micro-basic/basic/config"
 
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2/registry"
@@ -13,7 +14,7 @@ import (
 
 	"github.com/micro/go-micro/v2/web"
 
-	"user-web/basic"
+	"github.com/xiaobudongzhang/micro-basic/basic"
 )
 
 func main() {
