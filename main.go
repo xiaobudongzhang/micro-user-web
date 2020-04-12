@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"user-web/handler"
+
+	"github.com/xiaobudongzhang/micro-user-web/handler"
 
 	"github.com/xiaobudongzhang/micro-basic/config"
 

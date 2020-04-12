@@ -1,4 +1,4 @@
-module github.com/micro/go-micro-user-web
+module github.com/xiaobudongzhang/go-micro-user-web
 
 go 1.14
 
