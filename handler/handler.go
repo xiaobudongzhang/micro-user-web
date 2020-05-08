@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	user "github.com/xiaobudongzhang/micro-user-srv/proto/user"
 
 	"github.com/micro/go-micro/util/log"
@@ -26,37 +27,6 @@ type Error struct {
 func Init() {
 	serviceClient = user.NewUserService("mu.micro.book.service.user", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.service.auth", client.DefaultClient)
-}
-
-func UserCall(w http.ResponseWriter, r *http.Request) {
-	// decode the incoming request as json
-	var request map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	// call the backend service
-	userClient := user.NewUserService("mu.micro.book.service.user", client.DefaultClient)
-	rsp, err := userClient.Call(context.TODO(), &user.Request{
-		Name: request["name"].(string),
-	})
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	// we want to augment the response
-	response := map[string]interface{}{
-		"msg": rsp.Msg,
-		"ref": time.Now().UnixNano(),
-	}
-
-	// encode and write the response as json
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +60,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		log.Logf("生成token")
 
 		resp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
-			UserId:   uint64(rsp.User.Id),
+			UserId:   rsp.User.Id,
 			UserName: rsp.User.Name,
 		})
 
@@ -110,6 +80,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: "remeber-me-token", Value: resp2.Token, Path: "/", Expires: expire, MaxAge: 9000}
 
 		http.SetCookie(w, &cookie)
+
+		//同步到session
+		sess := session.GetSession(w, r)
+		sess.Values["userId"] = rsp.User.Id
+		sess.Values["userName"] = rsp.User.Name
+		_ = sess.Save(r, w)
 	} else {
 		response["success"] = false
 		response["error"] = &Error{
@@ -163,4 +139,20 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func TestSession(w http.ResponseWriter, r *http.Request) {
+	sess := session.GetSession(w, r)
+
+	if v, ok := sess.Values["path"]; !ok {
+		sess.Values["path"] = r.URL.Query().Get("path")
+		log.Logf("path:" + r.URL.Query().Get("path"))
+	} else {
+		log.Logf(v.(string))
+	}
+
+	log.Logf(sess.ID)
+	log.Logf(sess.Name())
+
+	w.Write([]byte("OK"))
 }

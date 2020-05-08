@@ -45,7 +45,7 @@
             $(".user").submit(function(e) {
                 e.preventDefault();
 
-		var url = window.location.href.replace(/\/$/, "") + "/user/call";
+		        var url ="/user/login";
                 var data = $(this).serializeArray()[0];
                 var name = data.value;
                 if (name.length == 0) {

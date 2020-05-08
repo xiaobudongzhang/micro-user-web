@@ -15,7 +15,7 @@ import (
 
 	"github.com/micro/go-micro/v2/web"
 
-	basic "github.com/xiaobudongzhang/micro-basic"
+	basic "github.com/xiaobudongzhang/micro-basic/basic"
 )
 
 func main() {
@@ -43,11 +43,11 @@ func main() {
 	// register html handler
 	service.Handle("/", http.FileServer(http.Dir("html")))
 
-	// register call handler
-	service.HandleFunc("/user/call", handler.UserCall)
-
 	// 注册登录接口
 	service.HandleFunc("/user/login", handler.Login)
+	// 注册退出接口
+	service.HandleFunc("/user/logout", handler.Logout)
+	service.HandleFunc("/user/test", handler.TestSession)
 
 	// run service
 	if err := service.Run(); err != nil {
@@ -56,5 +56,7 @@ func main() {
 }
 func registryOptions(ops *registry.Options) {
 	etcdCfg := config.GetEtcdConfig()
+
+	fmt.Println(etcdCfg.GetHost(), etcdCfg.GetPort())
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
 }
