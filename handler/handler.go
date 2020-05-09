@@ -75,12 +75,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Add("set-cookie", "application/json; charset=utf-8")
 
-		expire := time.Now().Add(30 * time.Minute)
+		expire := time.Now().Add(300 * time.Minute)
 
-		cookie := http.Cookie{Name: "remeber-me-token", Value: resp2.Token, Path: "/", Expires: expire, MaxAge: 9000}
+		cookie := http.Cookie{Name: "remeber-me-token", Value: resp2.Token, Path: "/", Expires: expire, MaxAge: 9000, HttpOnly: false, Secure: false}
 
 		http.SetCookie(w, &cookie)
 
+		cookie2 := http.Cookie{Name: "test", Value: resp2.Token, Path: "/", Expires: expire, MaxAge: 9000, HttpOnly: false, Secure: false}
+
+		http.SetCookie(w, &cookie2)
 		//同步到session
 		sess := session.GetSession(w, r)
 		sess.Values["userId"] = rsp.User.Id
