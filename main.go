@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	basic "github.com/xiaobudongzhang/micro-basic/basic"
+	"github.com/xiaobudongzhang/micro-basic/common"
 	"github.com/xiaobudongzhang/micro-user-web/handler"
 
 	"github.com/xiaobudongzhang/micro-basic/config"
@@ -12,14 +14,22 @@ import (
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
 	log "github.com/micro/go-micro/v2/util/log"
+	"github.com/micro/go-plugins/config/source/grpc/v2"
 
 	"github.com/micro/go-micro/v2/web"
-
-	basic "github.com/xiaobudongzhang/micro-basic/basic"
 )
 
+var (
+	appName = "user_web"
+	cfg     = &appCfg{}
+)
+
+type appCfg struct {
+	common.AppCfg
+}
+
 func main() {
-	basic.Init()
+	initCfg()
 
 	// 使用etcd注册
 	micReg := etcd.NewRegistry(registryOptions)
@@ -55,8 +65,30 @@ func main() {
 	}
 }
 func registryOptions(ops *registry.Options) {
-	etcdCfg := config.GetEtcdConfig()
+	etcdCfg := &common.Etcd{}
+	err := config.C().App("etcd", etcdCfg)
+	if err != nil {
 
-	fmt.Println(etcdCfg.GetHost(), etcdCfg.GetPort())
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
+		log.Log(err)
+		panic(err)
+	}
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.Host, etcdCfg.Port)}
+}
+
+func initCfg() {
+	source := grpc.NewSource(
+		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithPath("micro"),
+	)
+
+	basic.Init(config.WithSource(source))
+
+	err := config.C().App(appName, cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Logf("配置 cfg:%v", cfg)
+
+	return
 }

@@ -20,10 +20,11 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.4.1
 	github.com/gorilla/sessions v1.2.0 // indirect
-	github.com/micro-in-cn/tutorials/microservice-in-micro v0.0.0-20200430044506-2451e30bf530
+	github.com/micro-in-cn/tutorials/microservice-in-micro v0.0.0-20200510134214-a0f89cb675dc
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-micro/v2 v2.4.0
+	github.com/micro/go-plugins v1.5.1 // indirect
 	github.com/xiaobudongzhang/micro-auth v1.1.1
 	github.com/xiaobudongzhang/micro-basic v1.1.2
 	github.com/xiaobudongzhang/micro-user-srv v0.0.0-20200412120407-21b917b570be
