@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"net/http"
+	"time"
 
+	"github.com/afex/hystrix-go/hystrix"
 	basic "github.com/xiaobudongzhang/micro-basic/basic"
 	"github.com/xiaobudongzhang/micro-basic/common"
 	"github.com/xiaobudongzhang/micro-user-web/handler"
@@ -37,6 +40,8 @@ func main() {
 	service := web.NewService(
 		web.Name("mu.micro.book.web.user"),
 		web.Version("latest"),
+		web.RegistryTTL(time.Second*15),
+		web.RegistryInterval(time.Second*10),
 		web.Registry(micReg),
 		web.Address(":9088"),
 	)
@@ -58,6 +63,10 @@ func main() {
 	// 注册退出接口
 	service.HandleFunc("/user/logout", handler.Logout)
 	service.HandleFunc("/user/test", handler.TestSession)
+
+	hystrixStreamHandler := hystrix.NewStreamHandler()
+	hystrixStreamHandler.Start()
+	go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
 
 	// run service
 	if err := service.Run(); err != nil {
