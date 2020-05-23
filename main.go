@@ -9,6 +9,7 @@ import (
 	"github.com/afex/hystrix-go/hystrix"
 	basic "github.com/xiaobudongzhang/micro-basic/basic"
 	"github.com/xiaobudongzhang/micro-basic/common"
+	"github.com/xiaobudongzhang/micro-plugins/breaker"
 	"github.com/xiaobudongzhang/micro-user-web/handler"
 
 	"github.com/xiaobudongzhang/micro-basic/config"
@@ -40,8 +41,8 @@ func main() {
 	service := web.NewService(
 		web.Name("mu.micro.book.web.user"),
 		web.Version("latest"),
-		web.RegistryTTL(time.Second*15),
-		web.RegistryInterval(time.Second*10),
+		web.RegisterTTL(time.Second*15),
+		web.RegisterInterval(time.Second*10),
 		web.Registry(micReg),
 		web.Address(":9088"),
 	)
@@ -59,7 +60,8 @@ func main() {
 	service.Handle("/", http.FileServer(http.Dir("html")))
 
 	// 注册登录接口
-	service.HandleFunc("/user/login", handler.Login)
+	handlerLogin := http.HandlerFunc(handler.Login)
+	service.Handle("/user/login", breaker.BreakerWrapper(handlerLogin))
 	// 注册退出接口
 	service.HandleFunc("/user/logout", handler.Logout)
 	service.HandleFunc("/user/test", handler.TestSession)

@@ -6,11 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
+	"github.com/xiaobudongzhang/micro-plugins/session"
 	user "github.com/xiaobudongzhang/micro-user-srv/proto/user"
 
+	hystrix_go "github.com/afex/hystrix-go/hystrix"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-plugins/wrapper/breaker/hystrix/v2"
 	auth "github.com/xiaobudongzhang/micro-auth/proto/auth"
 )
 
@@ -25,8 +27,12 @@ type Error struct {
 }
 
 func Init() {
-	serviceClient = user.NewUserService("mu.micro.book.service.user", client.DefaultClient)
-	authClient = auth.NewService("mu.micro.book.service.auth", client.DefaultClient)
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
+	c1 := hystrix.NewClientWrapper()(client.DefaultClient)
+
+	serviceClient = user.NewUserService("mu.micro.book.service.user", c1)
+	authClient = auth.NewService("mu.micro.book.service.auth", c1)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
