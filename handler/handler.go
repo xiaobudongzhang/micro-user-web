@@ -36,6 +36,7 @@ func Init() {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 	if r.Method != "POST" {
 		log.Logf("非法请求")
 		http.Error(w, "非法请求", 400)
@@ -44,7 +45,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	rsp, err := serviceClient.QueryUserByName(context.TODO(), &user.UserRequest{
+	rsp, err := serviceClient.QueryUserByName(ctx, &user.UserRequest{
 		UserName: r.Form.Get("userName"),
 	})
 

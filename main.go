@@ -37,6 +37,15 @@ func main() {
 
 	// 使用etcd注册
 	micReg := etcd.NewRegistry(registryOptions)
+
+
+	t,io, err := tracer.NewTracer(cfg.Name, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer io.Close()
+	opentracing.SetGlobalTracer(t)
+
 	// create new web service
 	service := web.NewService(
 		web.Name("mu.micro.book.web.user"),
@@ -58,13 +67,13 @@ func main() {
 
 	// register html handler
 	service.Handle("/", http.FileServer(http.Dir("html")))
-
+	std2micro.SetSamplingFrequency(50)
 	// 注册登录接口
 	handlerLogin := http.HandlerFunc(handler.Login)
-	service.Handle("/user/login", breaker.BreakerWrapper(handlerLogin))
+	service.Handle("/user/login", std2micro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))
 	// 注册退出接口
-	service.HandleFunc("/user/logout", handler.Logout)
-	service.HandleFunc("/user/test", handler.TestSession)
+	service.HandleFunc("/user/logout", std2micro.TracerWrapper(handler.Logout))
+	service.HandleFunc("/user/test", std2micro.TracerWrapper(handler.TestSession))
 
 	hystrixStreamHandler := hystrix.NewStreamHandler()
 	hystrixStreamHandler.Start()
