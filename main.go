@@ -68,7 +68,7 @@ func main() {
 
 	hystrixStreamHandler := hystrix.NewStreamHandler()
 	hystrixStreamHandler.Start()
-	go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
+	go http.ListenAndServe(net.JoinHostPort("", "8085"), hystrixStreamHandler)
 
 	// run service
 	if err := service.Run(); err != nil {
