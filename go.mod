@@ -21,12 +21,15 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.4.1
 	github.com/gorilla/sessions v1.2.0 // indirect
+	github.com/micro-in-cn/tutorials/microservice-in-micro v0.0.0-20200523172022-7bc5e0adb1bf // indirect
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-micro/v2 v2.5.0
 	github.com/micro/go-plugins v1.5.1
 	github.com/micro/go-plugins/config/source/grpc/v2 v2.5.0 // indirect
 	github.com/micro/go-plugins/wrapper/breaker/hystrix/v2 v2.5.0
+	github.com/uber/jaeger-client-go v2.23.1+incompatible // indirect
+	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	github.com/xiaobudongzhang/micro-auth v1.1.1
 	github.com/xiaobudongzhang/micro-basic v1.1.2
 	github.com/xiaobudongzhang/micro-plugins v0.0.0-00010101000000-000000000000

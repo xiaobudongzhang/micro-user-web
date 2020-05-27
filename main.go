@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/afex/hystrix-go/hystrix"
+	"github.com/opentracing/opentracing-go"
 	basic "github.com/xiaobudongzhang/micro-basic/basic"
 	"github.com/xiaobudongzhang/micro-basic/common"
 	"github.com/xiaobudongzhang/micro-plugins/breaker"
@@ -21,6 +22,9 @@ import (
 	"github.com/micro/go-plugins/config/source/grpc/v2"
 
 	"github.com/micro/go-micro/v2/web"
+
+	tracer "github.com/xiaobudongzhang/micro-plugins/tracer/myjaeger"
+	"github.com/xiaobudongzhang/micro-plugins/tracer/myopentracing/stdmicro"
 )
 
 var (
@@ -38,8 +42,7 @@ func main() {
 	// 使用etcd注册
 	micReg := etcd.NewRegistry(registryOptions)
 
-
-	t,io, err := tracer.NewTracer(cfg.Name, "")
+	t, io, err := tracer.NewTracer(cfg.Name, "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,13 +70,13 @@ func main() {
 
 	// register html handler
 	service.Handle("/", http.FileServer(http.Dir("html")))
-	std2micro.SetSamplingFrequency(50)
+	stdmicro.SetSamplingFrequency(50)
 	// 注册登录接口
 	handlerLogin := http.HandlerFunc(handler.Login)
-	service.Handle("/user/login", std2micro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))
+	service.Handle("/user/login", stdmicro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))
 	// 注册退出接口
-	service.HandleFunc("/user/logout", std2micro.TracerWrapper(handler.Logout))
-	service.HandleFunc("/user/test", std2micro.TracerWrapper(handler.TestSession))
+	service.HandleFunc("/user/logout", handler.Logout)
+	service.HandleFunc("/user/test", handler.TestSession)
 
 	hystrixStreamHandler := hystrix.NewStreamHandler()
 	hystrixStreamHandler.Start()
