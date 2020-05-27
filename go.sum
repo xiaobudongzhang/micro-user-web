@@ -457,6 +457,7 @@ github.com/micro/go-plugins/config/source/grpc/v2 v2.5.0 h1:aobynBWNGy9HIT3hiv2h
 github.com/micro/go-plugins/config/source/grpc/v2 v2.5.0/go.mod h1:2gRvVvctyBWPHidbqQuppXQQqWOiPPMg/zAxOr5K3bs=
 github.com/micro/go-plugins/wrapper/breaker/hystrix/v2 v2.5.0 h1:83IUVaoay5lVyV25h7Vpx2dbEPcx/fgBeNgqCVhZOog=
 github.com/micro/go-plugins/wrapper/breaker/hystrix/v2 v2.5.0/go.mod h1:fLt+z2sYalB/VGmYtCaysKLfq/rcBCDUHycUAxF9ORo=
+github.com/micro/go-plugins/wrapper/trace/opentracing/v2 v2.5.0/go.mod h1:K4/yISJUzwN0GoLGMpGNGHR3eTy5Pc19xk0uyMs2lCE=
 github.com/micro/mdns v0.3.0 h1:bYycYe+98AXR3s8Nq5qvt6C573uFTDPIYzJemWON0QE=
 github.com/micro/mdns v0.3.0/go.mod h1:KJ0dW7KmicXU2BV++qkLlmHYcVv7/hHnbtguSWt9Aoc=
 github.com/micro/micro v1.16.0/go.mod h1:TO5Ng0KidbfRYIxVM4Q3deZ0A+qwRyP9WeXp+k2fWNA=

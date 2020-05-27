@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -44,7 +45,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-
+	fmt.Println("ctx")
+	fmt.Println(ctx)
 	rsp, err := serviceClient.QueryUserByName(ctx, &user.UserRequest{
 		UserName: r.Form.Get("userName"),
 	})
@@ -66,7 +68,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		log.Logf("生成token")
 
-		resp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
+		resp2, err := authClient.MakeAccessToken(ctx, &auth.Request{
 			UserId:   rsp.User.Id,
 			UserName: rsp.User.Name,
 		})

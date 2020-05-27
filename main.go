@@ -70,7 +70,7 @@ func main() {
 
 	// register html handler
 	service.Handle("/", http.FileServer(http.Dir("html")))
-	stdmicro.SetSamplingFrequency(50)
+	stdmicro.SetSamplingFrequency(100)
 	// 注册登录接口
 	handlerLogin := http.HandlerFunc(handler.Login)
 	service.Handle("/user/login", stdmicro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))
